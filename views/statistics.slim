@@ -1,12 +1,17 @@
-script type="text/javascript" src="/events/client.js"
-/ = @pubsub
-- if @pubsub
-  javascript:
-    var client = new Faye.Client('#{@pubsub[:server]}');
-    var subscription = client.subscribe('/#{@pubsub[:channel]}', function(message) {
-      // handle message
-      alert(message);
-    });
-- else
-  javascript:
-    window.location = '/';
+doctype html
+html
+  head
+    title BlameMe
+
+  body
+    div class="js-d3-container"
+      div class="svg-container js-svg-container"
+      
+    script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/d3/4.7.1/d3.min.js"
+    script type="text/javascript" src="/events/client.js"
+    javascript:
+      let pubsub = {
+        server: '#{@pubsub[:server]}',
+        channel: '#{@pubsub[:channel]}'
+      }
+    script type="text/javascript" src="/js/stats.js"
