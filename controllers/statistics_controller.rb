@@ -2,21 +2,13 @@
 
 class BlameMe < Sinatra::Base
   get '/statistics' do
-    @pubsub = session[:pubsub]
-    session[:pubsub] = nil
-
-    slim :statistics
-  end
-
-  post '/statistics' do
-    pubsub = {
+    @pubsub = {
       server: ENV['FAYE_SERVER'],
       channel: pubsub_channel
     }
-    AnalyzeRepoWorker.perform_async(params, pubsub)
+    AnalyzeRepoWorker.perform_async(params, @pubsub)
 
-    session[:pubsub] = pubsub
-    redirect to('/statistics')
+    slim :statistics
   end
 
   private
