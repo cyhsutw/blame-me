@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require 'sinatra'
+require 'sinatra/assetpack'
 require 'slim/include'
 require 'dotenv'
 require 'securerandom'

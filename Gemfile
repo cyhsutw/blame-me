@@ -19,6 +19,7 @@ gem 'rugged'
 
 gem 'sidekiq'
 gem 'sinatra'
+gem 'sinatra-assetpack'
 gem 'slim'
 
 group :development do
