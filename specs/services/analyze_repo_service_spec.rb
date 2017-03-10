@@ -6,13 +6,13 @@ describe 'AnalyzeRepoService' do
     describe 'with valid params' do
       before(:all) do
         params = {
-          repo_url: 'https://github.com/sinatra/sinatra.git'
+          'repo_url' => 'https://github.com/sinatra/sinatra.git'
         }
         @result = AnalyzeRepoService.call(params)
       end
 
-      it 'returns a Dry::Monads::Either' do
-        @result.must_be_instance_of Dry::Monads::Either
+      it 'returns a Dry::Monads::Either::Right' do
+        @result.must_be_instance_of Dry::Monads::Either::Right
       end
 
       it 'succeeds' do
@@ -32,8 +32,8 @@ describe 'AnalyzeRepoService' do
           @result = AnalyzeRepoService.call(params)
         end
 
-        it 'returns a Dry::Monads::Either' do
-          @result.must_be_instance_of Dry::Monads::Either
+        it 'returns a Dry::Monads::Either::Left' do
+          @result.must_be_instance_of Dry::Monads::Either::Left
         end
 
         it 'fails' do
@@ -43,12 +43,12 @@ describe 'AnalyzeRepoService' do
 
       describe 'malformed repo_url param' do
         before(:all) do
-          params = { repo_url: 'https://not-github.com/sinatra/sinatra.git' }
+          params = { 'repo_url' => 'https://not-github.com/sinatra/sinatra.git' }
           @result = AnalyzeRepoService.call(params)
         end
 
-        it 'returns a Dry::Monads::Either' do
-          @result.must_be_instance_of Dry::Monads::Either
+        it 'returns a Dry::Monads::Either::Left' do
+          @result.must_be_instance_of Dry::Monads::Either::Left
         end
 
         it 'fails' do
