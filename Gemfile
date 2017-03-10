@@ -6,6 +6,10 @@ gem 'rugged'
 
 gem 'sinatra'
 
+group :development do
+  gem 'rubocop'
+end
+
 group :test do
   gem 'minitest'
   gem 'minitest-hooks'

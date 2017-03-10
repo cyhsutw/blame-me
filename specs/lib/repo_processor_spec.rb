@@ -2,7 +2,7 @@
 require_relative '../spec_helper.rb'
 
 describe 'RepoProcessor' do
-  REPO_URL = 'https://github.com/sinatra/sinatra.git'.freeze
+  REPO_URL = 'https://github.com/sinatra/sinatra.git'
 
   before(:all) do
     # this is expensive, do it per `describe`
