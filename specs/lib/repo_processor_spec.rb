@@ -18,12 +18,10 @@ describe 'RepoProcessor' do
       @processor.must_be_instance_of RepoProcessor
     end
 
-    it 'sets `repo_url` instance variable' do
-      @processor.instance_variable_get(:@repo_url).wont_be_nil
-    end
-
-    it 'sets `path` instance variable' do
-      @processor.instance_variable_get(:@path).wont_be_nil
+    it 'sets instance variables' do
+      %w(path repo_url repo).each do |variable_name|
+        @processor.instance_variable_get(:"@#{variable_name}").wont_be_nil
+      end
     end
 
     it 'clones to repository to a specific folder' do
@@ -58,6 +56,20 @@ describe 'RepoProcessor' do
 
     it 'clears the value of `@path`' do
       @processor.path.must_be_nil
+    end
+  end
+
+  describe '#repo_stats' do
+    before(:all) do
+      @repo_stats = @processor.repo_stats
+    end
+
+    it 'returns an array' do
+      @repo_stats.must_be_instance_of Array
+    end
+
+    it 'returns an array of FileStat' do
+      @repo_stats.all? { |stat| stat.is_a? FileStat }.must_equal true
     end
   end
 end
