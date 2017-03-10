@@ -1,18 +1,25 @@
 # frozen_string_literal: true
 source 'https://rubygems.org'
 
+ruby '2.4.0'
+
 gem 'dotenv'
 gem 'dry-container'
 gem 'dry-monads'
 gem 'dry-transaction'
 
+gem 'puma'
+
 gem 'rake'
 gem 'rugged'
 
+gem 'sidekiq'
 gem 'sinatra'
 gem 'slim'
 
 group :development do
+  gem 'foreman'
+
   gem 'rubocop'
 end
 
