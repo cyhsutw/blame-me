@@ -8,5 +8,6 @@ gem 'sinatra'
 
 group :test do
   gem 'minitest'
+  gem 'minitest-hooks'
   gem 'minitest-rg'
 end

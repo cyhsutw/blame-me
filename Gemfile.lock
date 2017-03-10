@@ -2,6 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     minitest (5.10.1)
+    minitest-hooks (1.4.0)
     minitest-rg (5.2.0)
       minitest (~> 5.0)
     rack (1.6.5)
@@ -20,6 +21,7 @@ PLATFORMS
 
 DEPENDENCIES
   minitest
+  minitest-hooks
   minitest-rg
   rake
   rugged
