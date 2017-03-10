@@ -11,13 +11,5 @@ describe 'statistics controller' do
         last_response.must_be_ok
       end
     end
-
-    describe 'POST' do
-      before { post '/statistics' }
-
-      it 'redirects to `/statistics`' do
-        last_response.status.must_equal 302
-      end
-    end
   end
 end
