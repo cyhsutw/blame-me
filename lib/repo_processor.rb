@@ -18,6 +18,7 @@ class RepoProcessor
     return [] if @repo.nil?
 
     files = list_tree
+    files << root_file
     files.map { |file| file_stats(file) }
   end
 
@@ -60,5 +61,9 @@ class RepoProcessor
     end
     file[:stats] = hunk_groups
     FileStat.new(file)
+  end
+
+  def root_file
+    { name: '.', path: '.', parent_path: '', type: :tree }
   end
 end
