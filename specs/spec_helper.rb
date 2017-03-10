@@ -4,7 +4,7 @@ require 'minitest/rg'
 require 'minitest/hooks/default'
 require 'rack-minitest/test'
 
-%w(lib controllers).each do |folder|
+%w(lib controllers services values).each do |folder|
   require_relative "../#{folder}/init.rb"
 end
 

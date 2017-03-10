@@ -2,6 +2,9 @@
 source 'https://rubygems.org'
 
 gem 'dotenv'
+gem 'dry-container'
+gem 'dry-monads'
+gem 'dry-transaction'
 
 gem 'rake'
 gem 'rugged'
