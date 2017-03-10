@@ -3,10 +3,7 @@ require 'minitest/autorun'
 require 'minitest/rg'
 require 'minitest/hooks/default'
 require 'rack-minitest/test'
-
-%w(lib controllers services values).each do |folder|
-  require_relative "../#{folder}/init.rb"
-end
+require_relative '../init.rb'
 
 def app
   BlameMe
