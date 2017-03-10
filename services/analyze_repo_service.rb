@@ -25,7 +25,9 @@ class AnalyzeRepoService
       info[:repo_url] = repo_url
       Right(info)
     else
-      Left(Error.new('Invalid URL for repository, please check your repository URL.'))
+      error = Error.new('Invalid URL for repository, please check your repository URL.')
+      publish({ error: error.message }, info.dig(:pubsub))
+      Left(error)
     end
   }
 
@@ -36,7 +38,9 @@ class AnalyzeRepoService
       info[:processor] = processor
       Right(info)
     rescue
-      Left(Error.new('Error cloning your repository, please check your repository URL.'))
+      error = Error.new('Error cloning your repository, please check your repository URL.')
+      publish({ error: error.message }, info.dig(:pubsub))
+      Left(error)
     end
   }
 
@@ -44,10 +48,12 @@ class AnalyzeRepoService
     processor = info.dig(:processor)
     begin
       stats = processor.repo_stats
-      publish(stats, info.dig(:pubsub))
+      publish({ data: stats.map(&:to_h) }, info.dig(:pubsub))
       Right(stats)
     rescue
-      Left(Error.new('Error processing your repository, please try again later.'))
+      error = Error.new('Error processing your repository, please try again later.')
+      publish({ error: error.message }, info.dig(:pubsub))
+      Left(error)
     ensure
       processor.destroy_repo!
     end
@@ -55,7 +61,7 @@ class AnalyzeRepoService
 
   private_class_method
 
-  def self.publish(stats, pubsub_info)
+  def self.publish(payload, pubsub_info)
     return unless pubsub_info&.dig('channel')
     return unless pubsub_info&.dig('server')
     HTTParty.post(
@@ -63,7 +69,7 @@ class AnalyzeRepoService
       headers: { 'Content-Type' => 'application/json' },
       body: {
         channel: "/#{pubsub_info&.dig('channel')}",
-        data: stats.map(&:to_h)
+        data: payload
       }.to_json
     )
   end
