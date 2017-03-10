@@ -9,4 +9,12 @@ class FileStat
     @parent_path = options[:parent_path] || '.'
     @stats = options[:stats]
   end
+
+  def to_h
+    Hash[
+      %w(name type path parent_path stats).map do |attribute|
+        [attribute.to_sym, instance_variable_get(:"@#{attribute}")]
+      end
+    ]
+  end
 end

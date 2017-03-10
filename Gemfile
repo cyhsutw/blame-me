@@ -8,6 +8,10 @@ gem 'dry-container'
 gem 'dry-monads'
 gem 'dry-transaction'
 
+gem 'faye'
+
+gem 'httparty'
+
 gem 'puma'
 
 gem 'rake'

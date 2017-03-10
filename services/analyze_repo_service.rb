@@ -6,9 +6,10 @@ class AnalyzeRepoService
 
   REPO_URL_REGEX = %r{(http|https):\/\/.+}
 
-  def self.call(params)
+  def self.call(params, pubsub: nil)
     info = {
-      params: params
+      params: params,
+      pubsub: pubsub
     }
 
     Dry.Transaction(container: self) do
@@ -43,6 +44,7 @@ class AnalyzeRepoService
     processor = info.dig(:processor)
     begin
       stats = processor.repo_stats
+      publish(stats, info.dig(:pubsub))
       Right(stats)
     rescue
       Left(Error.new('Error processing your repository, please try again later.'))
@@ -50,4 +52,19 @@ class AnalyzeRepoService
       processor.destroy_repo!
     end
   }
+
+  private_class_method
+
+  def self.publish(stats, pubsub_info)
+    return unless pubsub_info&.dig('channel')
+    return unless pubsub_info&.dig('server')
+    HTTParty.post(
+      pubsub_info.dig('server'),
+      headers: { 'Content-Type' => 'application/json' },
+      body: {
+        channel: "/#{pubsub_info&.dig('channel')}",
+        data: stats.map(&:to_h)
+      }.to_json
+    )
+  end
 end

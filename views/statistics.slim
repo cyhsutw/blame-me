@@ -1,1 +1,12 @@
-/ nothing here for now
+script type="text/javascript" src="/events/client.js"
+/ = @pubsub
+- if @pubsub
+  javascript:
+    var client = new Faye.Client('#{@pubsub[:server]}');
+    var subscription = client.subscribe('/#{@pubsub[:channel]}', function(message) {
+      // handle message
+      alert(message);
+    });
+- else
+  javascript:
+    window.location = '/';

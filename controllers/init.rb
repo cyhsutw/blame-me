@@ -2,6 +2,7 @@
 require 'sinatra'
 require 'slim/include'
 require 'dotenv'
+require 'securerandom'
 
 Dotenv.load
 
