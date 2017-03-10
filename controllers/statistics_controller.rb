@@ -6,7 +6,6 @@ class BlameMe < Sinatra::Base
   end
 
   post '/statistics' do
-
     redirect to('/statistics')
   end
 end
