@@ -2,10 +2,31 @@ doctype html
 html
   head
     title BlameMe
-
+    link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.2/pure-min.css"
+    link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/spinkit/1.2.5/spinners/9-cube-grid.min.css"
+    link rel="stylesheet" type="text/css" href="/css/shared.css"
+    link rel="stylesheet" type="text/css" href="/css/stats.css"
   body
-    div class="js-d3-container"
-      div class="svg-container js-svg-container"
+    nav class="top-bar"
+      a href="/" BlameMe
+    div class="site-content"
+      div class="pure-g"
+        div class="pure-u-12-24 js-svg-container"
+      div class="stats-box"
+          p class="path js-path"
+          div class="stats js-stats"
+      div class="spinner js-spinner"
+        div class="sk-cube-grid"
+          div class="sk-cube sk-cube1"
+          div class="sk-cube sk-cube2"
+          div class="sk-cube sk-cube3"
+          div class="sk-cube sk-cube4"
+          div class="sk-cube sk-cube5"
+          div class="sk-cube sk-cube6"
+          div class="sk-cube sk-cube7"
+          div class="sk-cube sk-cube8"
+          div class="sk-cube sk-cube9"
+        
       
     script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/d3/4.7.1/d3.min.js"
     script type="text/javascript" src="/events/client.js"
