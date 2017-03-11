@@ -7,6 +7,8 @@ class AnalyzeRepoService
   REPO_URL_REGEX = %r{(http|https):\/\/.+}
 
   def self.call(params, pubsub: nil)
+    wait_until_client_starts if pubsub
+
     info = {
       params: params,
       pubsub: pubsub
@@ -60,6 +62,10 @@ class AnalyzeRepoService
   }
 
   private_class_method
+
+  def self.wait_until_client_starts
+    sleep 1.0
+  end
 
   def self.publish(payload, pubsub_info)
     return unless pubsub_info&.dig('channel')

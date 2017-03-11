@@ -13,6 +13,7 @@ class RepoProcessor
     return [] if @repo.nil?
 
     files = list_tree
+    files << root_file
     files.map { |file| file_stats(file) }
   end
 
