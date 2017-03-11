@@ -64,7 +64,7 @@ class AnalyzeRepoService
   private_class_method
 
   def self.wait_until_client_starts
-    sleep 1.0
+    sleep 3.0
   end
 
   def self.publish(payload, pubsub_info)
