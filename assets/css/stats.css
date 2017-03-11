@@ -1,0 +1,49 @@
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 1rem 5rem;
+  background: #e85231;
+  font-size: 16pt;
+}
+
+.filename {
+  cursor: pointer;
+  padding: 10px;
+  fill: #000000;
+  user-select: none;
+}
+
+.filename:hover {
+  fill: #e85231;
+}
+
+.site-content {
+  margin: calc(16pt + 4rem) 5%;
+}
+
+.stats-box {
+  position: fixed;
+  width: 45%;
+  top: calc(16pt + 4rem);
+  left: 50%;
+  overflow-y: scroll;
+}
+
+.path {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.spinner {
+  position: fixed;
+  width: 40px;
+  height: 120px;
+  left: calc((100% - 40px) * 0.5);
+  top: calc((100% - 120px) * 0.5);
+}
+
+.sk-cube-grid .sk-cube {
+  background-color: #cccccc;
+}
