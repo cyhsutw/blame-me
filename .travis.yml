@@ -1,0 +1,9 @@
+language: ruby
+
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install cmake
+
+script:
+  - bundle exec rake test
+  - bundle exec rubocop .
