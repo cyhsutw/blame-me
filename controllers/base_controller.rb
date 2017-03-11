@@ -8,7 +8,7 @@ class BlameMe < Sinatra::Base
                              secret: ENV['RACK_SESSION_SECRET']
 
   set :views, File.expand_path('../views', __dir__)
-  set :public_folder, File.expand_path('../assets', __dir__) 
+  set :public_folder, File.expand_path('../assets', __dir__)
 
   get '/?' do
     slim :root
