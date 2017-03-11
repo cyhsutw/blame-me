@@ -36,7 +36,7 @@ Paste in the `https` URL of your repo and we'll do the rest.
 $ bundle exec foreman start
 ```
 
-Then access the site by visiting http://localhost:5000
+Then access the site by visiting [http://localhost:5000](http://localhost:5000).
 
 ### Run tests
 
