@@ -1,9 +1,4 @@
 # frozen_string_literal: true
-require 'rugged'
-require 'tmpdir'
-require 'fileutils'
-require 'securerandom'
-
 class RepoProcessor
   attr_reader :path, :repo_url
 
@@ -18,7 +13,6 @@ class RepoProcessor
     return [] if @repo.nil?
 
     files = list_tree
-    files << root_file
     files.map { |file| file_stats(file) }
   end
 
@@ -63,7 +57,11 @@ class RepoProcessor
     FileStat.new(file)
   end
 
+  def project_name
+    URI(repo_url).path.split('/').last
+  end
+
   def root_file
-    { name: '.', path: '.', parent_path: '', type: :tree }
+    { name: project_name, path: project_name, parent_path: '', type: :tree }
   end
 end
