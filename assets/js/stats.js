@@ -1,37 +1,110 @@
 var client = new Faye.Client(pubsub.server);
 var subscription = client.subscribe(`/${pubsub.channel}`, function (message) {
   if (message.error) {
-    // TODO: show error
+    alert(message.error);
+    window.location.reload();
     return;
   }
-  // batch statistics calculation
-  var calculateStatistics = function (items) {
-    var statistics = {};
+
+  var buildTree = function (items) {
+    var root = items[items.length - 1];
+    root.path = root.name;
     for (var idx in items) {
       var item = items[idx];
-      statistics[item.path] = item.stats || {};
-    }
-    for (var idx in items) {
-      var item = items[idx];
-      if (item.stats) {
-        for (var key in item.stats) {
-          if(statistics[item.parent_path][key]) {
-            statistics[item.parent_path][key] = statistics[item.parent_path][key] + item.stats[key];
-          } else {
-            statistics[item.parent_path][key] = item.stats[key];
-          }
+
+      if (item != root) {
+        item.path = [root.path, item.path].join('/');
+        if (item.parent_path === '.') {
+          item.parent_path = root.path;
+        } else {
+          item.parent_path = [root.path, item.parent_path].join('/');
         }
       }
     }
+  };
+
+  // batch statistics calculation
+  var calculateStatistics = function (items) {
+    var nodeMap = {};
+
+    items.forEach(function (node) {
+      nodeMap[node.path] = node;
+    });
+
+    var tree = {};
+
+    var internalNodes = items.filter(function (item) { return item.type === 'tree'; });
+    internalNodes.forEach(function (node) {
+      tree[node.path] = [];
+    });
+
+    items.forEach(function (node) {
+      if (tree[node.parent_path]) {
+        tree[node.parent_path].push(node.path);
+      }
+    });
+
+    var sumStatistics = function (stats) {
+      var allStats = {};
+      stats.forEach(function (stat) {
+        for (var email in stat) {
+          if (allStats[email]) {
+            allStats[email] = allStats[email] + stat[email];
+          } else {
+            allStats[email] = stat[email];
+          }
+        }
+      });
+      return allStats;
+    };
+
+    var statistics = {};
+    var setStatistics = function (node_path) {
+      var node = nodeMap[node_path];
+      if (node) {
+        if (node.type === 'blob') {
+          statistics[node.path] = node.stats;
+        } else {
+          statistics[node.path] = sumStatistics(
+            tree[node.path].map(function (child_path) {
+              return setStatistics(child_path);
+            })
+          );
+        }
+        return statistics[node.path];
+      } else {
+        return {};
+      }
+    };
+
+    setStatistics(items[items.length - 1].path);
+
+    for (var key in statistics) {
+      var stats = statistics[key];
+
+      var sortedStats = [];
+      for (var email in stats) {
+        sortedStats.push({ email: email, numLines: stats[email] })
+      }
+      sortedStats.sort(function(x, y) {
+        // multiply -1 for descending order
+        return -1 * (x.numLines - y.numLines);
+      });
+
+      statistics[key] = sortedStats;
+    }
+
     return statistics;
   };
 
-  var statistics = calculateStatistics(message.data);
+  var items = message.data;
+  buildTree(items);
+  var statistics = calculateStatistics(items);
 
   // prepare data for D3
   var treeData = d3.stratify()
                    .id(function (node) { return node.path; })
-                   .parentId(function (node) { return node.parent_path; })(message.data);
+                   .parentId(function (node) { return node.parent_path; })(items);
 
   var i = 0,
       duration = 400,
@@ -44,9 +117,64 @@ var subscription = client.subscribe(`/${pubsub.channel}`, function (message) {
 
   var tree = d3.tree().nodeSize([0, 30]);
 
+  var createStatisticsTable = function (statistics) {
+    var table = document.createElement('table');
+    table.classList.add('pure-table');
+
+    var thead = document.createElement('thead');
+    table.appendChild(thead);
+
+    var theadTr = document.createElement('tr');
+    thead.appendChild(theadTr);
+
+    (function (tr) {
+      ['#', 'email', '#lines'].forEach(function (columnName) {
+        var th = document.createElement('th');
+        th.innerHTML = columnName;
+        tr.appendChild(th);
+      });
+    })(theadTr);
+
+    var tbody = document.createElement('tbody');
+    table.appendChild(tbody);
+
+    statistics.forEach(function(stat, index) {
+      var tr = document.createElement('tr');
+
+      var rank = document.createElement('td');
+      tr.appendChild(rank);
+      rank.innerHTML = index + 1;
+
+      var email = document.createElement('td');
+      tr.appendChild(email);
+      email.innerHTML = stat.email;
+
+      var numLines = document.createElement('td');
+      tr.appendChild(numLines);
+      numLines.innerHTML = stat.numLines;
+
+      tbody.appendChild(tr);
+    });
+
+    return table;
+  };
+
   var showStatistics = function (node) {
-    // TODO: show in other element
-    // alert(statistics[node.data.data.path]);
+    var table = createStatisticsTable(statistics[node.data.data.path]);
+
+    var container = document.querySelector('.js-stats');
+
+    while (container.hasChildNodes()) {
+      container.removeChild(container.lastChild);
+    }
+    container.appendChild(table);
+
+    var pathElement = document.querySelector('.js-path');
+    var path = node.data.data.path;
+    if (node.data.data.type === 'tree') {
+      path = path + '/';
+    }
+    pathElement.innerHTML = path;
   };
 
   var toggleChildren = function (node) {
@@ -83,7 +211,7 @@ var subscription = client.subscribe(`/${pubsub.channel}`, function (message) {
     });
 
     nodesSort.forEach(function (n, i) {
-      n.x = i * barHeight;
+      n.x = (i + 1) * barHeight;
     });
 
 
@@ -100,7 +228,7 @@ var subscription = client.subscribe(`/${pubsub.channel}`, function (message) {
              .attr('dy', 3.5)
              .attr('dx', 5.5)
              .classed('filename', true)
-             .text(function (d) { return d.data.id; })
+             .text(function (d) { return d.data.data.name; })
              .on('click', toggleChildren)
              .on('mouseover', showStatistics);
 
@@ -127,5 +255,8 @@ var subscription = client.subscribe(`/${pubsub.channel}`, function (message) {
     });
   };
 
+  document.querySelector('.js-spinner').classList.add('hidden');
+
   updateLayout(root);
+  showStatistics(root);
 });
