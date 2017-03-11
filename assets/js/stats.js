@@ -2,7 +2,7 @@ var client = new Faye.Client(pubsub.server);
 var subscription = client.subscribe(`/${pubsub.channel}`, function (message) {
   if (message.error) {
     alert(message.error);
-    window.location.reload();
+    window.location = '/';
     return;
   }
 
@@ -99,6 +99,7 @@ var subscription = client.subscribe(`/${pubsub.channel}`, function (message) {
 
   var items = message.data;
   buildTree(items);
+  console.log(items);
   var statistics = calculateStatistics(items);
 
   // prepare data for D3
@@ -227,6 +228,7 @@ var subscription = client.subscribe(`/${pubsub.channel}`, function (message) {
     nodeEnter.append('text')
              .attr('dy', 3.5)
              .attr('dx', 5.5)
+             .attr('font-family', "'Roboto Condensed', sans-serif")
              .classed('filename', true)
              .text(function (d) { return d.data.data.name; })
              .on('click', toggleChildren)
