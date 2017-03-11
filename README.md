@@ -4,7 +4,7 @@ https://blame-me.herokuapp.com/
 
 See who contributes more many lines of code using `git blame`.
 
-Paste in the `https` URL of your repo to see the report.
+Paste in the `https` URL of your repo and we'll do the rest.
 
 ## Requirements
 
