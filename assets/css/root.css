@@ -1,0 +1,42 @@
+.site-content {
+  margin: 15% 5%;
+  text-align: center;
+}
+
+.site-title {
+  font-size: 48pt;
+  margin-bottom: 0.5rem;
+  color: #333333;
+}
+
+.site-description {
+  font-size: 12pt;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  color: #999999;
+}
+
+.form-container input[type=url] {
+  padding: 6pt 8pt;
+  font-size: 12pt;
+  width: 400px;
+  max-width: 80%;
+  border-radius: 6px;
+  border: 2px solid #ccc;
+  box-sizing: border-box;
+}
+
+.form-container button {
+  padding: 6pt 8pt;
+  font-size: 12pt;
+  margin-left: 0.5rem;
+  text-transform: uppercase;
+  background: #e85231;
+  border-radius: 6px;
+  color: #fff;
+  border: none;
+}
+
+*:focus {
+  outline: none;
+}

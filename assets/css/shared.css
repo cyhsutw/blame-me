@@ -1,3 +1,11 @@
+html {
+  background: url('/images/tile.png');
+}
+
+body {
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
 .hidden {
   display: none;
 }

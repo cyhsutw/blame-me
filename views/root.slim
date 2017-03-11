@@ -2,10 +2,14 @@ doctype html
 html
   head
     title BlameMe
-    link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.2/pure-min.css"
+    link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto+Condensed"
     link rel="stylesheet" type="text/css" href="/css/shared.css"
-    
+    link rel="stylesheet" type="text/css" href="/css/root.css"
   body
-    form action='/statistics' method='GET'
-      input type="text" name="repo_url"
-      button type="Submit" Blame!
+    div class="site-content"
+      div class="site-title" BlameMe
+      div class="site-description" who contributes how many lines of code?
+      div class="form-container"
+        form action='/statistics' method='GET'
+          input type="url" name="repo_url" placeholder="https://github.com/sinatra/sinatra.git" autofocus="true" required="true"
+          button type="Submit" Analyze

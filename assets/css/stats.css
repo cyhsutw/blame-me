@@ -13,6 +13,7 @@
   padding: 10px;
   fill: #000000;
   user-select: none;
+  font-family: 'Roboto Condensed', sans-serif;
 }
 
 .filename:hover {
