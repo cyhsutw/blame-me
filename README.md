@@ -2,7 +2,6 @@
 
 [![Build Status](https://travis-ci.org/cyhsutw/blame-me.svg?branch=master)](https://travis-ci.org/cyhsutw/blame-me)
 
-https://blame-me.herokuapp.com/
 
 See who contributes more many lines of code using `git blame`.
 
